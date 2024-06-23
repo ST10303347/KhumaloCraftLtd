@@ -1,5 +1,6 @@
 ﻿using KhumaloCraftLtd.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 namespace KhumaloCraftLtd.Data.Services
 {
@@ -11,15 +12,17 @@ namespace KhumaloCraftLtd.Data.Services
         {
             _context = context;
         }
-        public Task Add(ProductModel product)
+        public async Task Add(ProductModel product)
         {
-            var applicationDbContext = _context.Products.Include(p => p.User);
-            return (Task)applicationDbContext;
+            _context.Products.Add(product);
+            await _context.SaveChangesAsync();
         }
 
         public IQueryable<ProductModel> GetAll()
         {
-            throw new NotImplementedException();
+            var applicationDbContext = _context.Products.Include(p => p.User);
+            return applicationDbContext;
+            
         }
 
         public Task<ProductModel> GetById(int? id)
