@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using KhumaloCraftLtd.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace KhumaloCraftLtd.Data
@@ -9,5 +10,9 @@ namespace KhumaloCraftLtd.Data
             : base(options)
         {
         }
+
+        public DbSet<ProductModel> Products { get; set; }
+        public DbSet<Purchase> Purchases { get; set; }
+        public DbSet<Comment> Comments { get; set; }
     }
 }

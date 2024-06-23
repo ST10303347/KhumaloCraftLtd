@@ -1,4 +1,5 @@
 using KhumaloCraftLtd.Data;
+using KhumaloCraftLtd.Data.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,6 +20,8 @@ namespace KhumaloCraftLtd
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddControllersWithViews();
+
+            builder.Services.AddScoped<IProductsService, ProductService>();
 
             var app = builder.Build();
 
@@ -43,7 +46,7 @@ namespace KhumaloCraftLtd
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=ProductModels}/{action=Index}/{id?}");
             app.MapRazorPages();
 
             app.Run();
