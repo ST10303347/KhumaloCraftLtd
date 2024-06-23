@@ -25,9 +25,14 @@ namespace KhumaloCraftLtd.Data.Services
             
         }
 
-        public Task<ProductModel> GetById(int? id)
+        public async Task<ProductModel> GetById(int? id)
         {
-            throw new NotImplementedException();
+            var product1 = await _context.Products
+               .Include(l => l.User)
+              
+             
+               .FirstOrDefaultAsync(m => m.Id == id);
+            return product1;
         }
 
         public Task SaveChanges()

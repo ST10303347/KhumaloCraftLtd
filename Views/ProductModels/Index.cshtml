@@ -11,7 +11,7 @@
     <div style="font-family: Arial, sans-serif; margin: 0; padding: 20px;">
 
         <img src="~/Images/@product.ImagePath" style="width: 300px; height: 300px;">
-        <h2><a asp-controller="ProductModelsController" asp-action="Details" asp-route-id="@product.Id">@product.productName</a></h2>
+        <h2><a asp-controller="ProductModels" asp-action="Details" asp-route-id="@product.Id">@product.productName</a></h2>
         <h3>@product.Price</h3>
         <div>Seller: @product.User.Email</div>
 

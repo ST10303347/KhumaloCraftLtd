@@ -72,24 +72,29 @@ namespace KhumaloCraftLtd.Controllers
             return View(product);
         }
 
-        /*   // GET: ProductModels/Details/5
-           public async Task<IActionResult> Details(int? id)
-           {
-               if (id == null)
-               {
-                   return NotFound();
-               }
+        // GET: ProductModels/Details/5
 
-               var productModel = await _context.Products
-                   .Include(p => p.User)
-                   .FirstOrDefaultAsync(m => m.Id == id);
-               if (productModel == null)
-               {
-                   return NotFound();
-               }
+        public async Task<IActionResult> Details(int? id)
+            {
+                if (id == null)
+                {
+                    return NotFound();
+                }
 
-               return View(productModel);
-           }
+                var productModel = await _ProductService.GetById(id);
+                if (productModel == null)
+                {
+                    return NotFound();
+                }
+
+                return View(productModel);
+            }
+
+
+
+        
+
+        /*  
 
 
 

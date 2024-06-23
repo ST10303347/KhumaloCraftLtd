@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.Security.Cryptography;
 
 namespace KhumaloCraftLtd.Models
 {
@@ -24,6 +25,7 @@ namespace KhumaloCraftLtd.Models
         [ForeignKey("IdentityUserId")]
         public IdentityUser? User { get; set; }
 
-        //public List<Comment>? Comments { get; set; }
+
+       
     }
 }
