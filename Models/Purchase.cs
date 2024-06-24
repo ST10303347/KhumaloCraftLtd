@@ -17,6 +17,6 @@ namespace KhumaloCraftLtd.Models
 
         public int? productId { get; set; }
         [ForeignKey("productId")]
-        public ProductModel? Listing { get; set; }
+        public ProductModel? Product { get; set; }
     }
 }

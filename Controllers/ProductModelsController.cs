@@ -17,11 +17,13 @@ namespace KhumaloCraftLtd.Controllers
     {
         private readonly IProductsService _ProductService;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IPurchaseService _PurchaseService;
 
-        public ProductModelsController(IProductsService productsService, IWebHostEnvironment webHostEnvironment)
+        public ProductModelsController(IProductsService productsService, IWebHostEnvironment webHostEnvironment, IPurchaseService purchaseService)
         {
             _ProductService = productsService;
             _webHostEnvironment = webHostEnvironment;
+            _PurchaseService = purchaseService;
         }
 
         // GET: ProductModels
@@ -89,10 +91,57 @@ namespace KhumaloCraftLtd.Controllers
 
                 return View(productModel);
             }
+        [HttpPost]
+        public async Task<ActionResult> Purchase(Purchase purchase)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("PurchaseForm", purchase); 
+            }
+
+            try
+            {
+                await _PurchaseService.Add(purchase);
+
+             
+                var product = await _ProductService.GetById(purchase.productId.Value);
+               
+
+               
+                if (product.Availability < purchase.quantity)
+                {
+                    ModelState.AddModelError("", "Insufficient product availability.");
+                    return View("Error"); 
+                }
+
+               
+                product.Availability -= purchase.quantity;
+
+                
+                await _ProductService.SaveChanges();
+
+                
+                return View("Details", product);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "An error occurred while processing your request.");
+                return View("Error");
+                
+            }
+           
+            
+        }
+        public async Task<ActionResult> AddStock(int id, int Quantity)
+        {
+            var product = await _ProductService.GetById(id);
+           product.Availability += Quantity;
+            await _ProductService.SaveChanges();
+            return View("Details", product);
+        }
 
 
 
-        
 
         /*  
 

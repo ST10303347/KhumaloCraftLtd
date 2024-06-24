@@ -17,31 +17,36 @@
         </div>
         <div class="col col-xs-6 col-lg-7">
             <div>@Model.Description</div>
-
-
- @if(User.Identity.IsAuthenticated)
+            <h3>Remaining stock : @Model.Availability</h3>
+            @if (User.Identity.IsAuthenticated && userManager.GetUserId(User) == Model.User.Id)
             {
-                <form  asp-action="Purchase" method="post">
-                    <div>
-                       
-                        <input type="hidden" name="IdentityUserId" class="form-control" value="@userManager.GetUserId(User)"/>
-                        <input type="hidden" name="ListingId" class="form-control" value="@Model.Id" />
-                        <label for="quantity">Quantity:</label>
-                        <input type="number"  name="Quantity" min="1" step="1" class="form-control" value="1" required />
-                        <input type="submit" value="Buy" class="btn btn-primary" />
-                    </div>
-                </form>
-                   @if(userManager.GetUserId(User) == Model.User.Id)
-                {
-                    <form asp-action="AddStock" method="post">
-                        <input type="hidden" name="ListingId" class="form-control" value="@Model.Id" />
+
+               
+                <form asp-action="AddStock" method="post">
+                    <input type="hidden" name="id" class="form-control" value="@Model.Id" />
                         <label for="quantity">Quantity:</label>
                         <input type="number" name="Quantity" min="1" step="1" class="form-control" value="1" required />
                         <input type="submit" value="Add stock" class="btn btn-primary" />
 
 
-                   </form>
-                }
+                   </form>}
+ else if(User.Identity.IsAuthenticated)
+            {
+                <form  asp-action="Purchase" method="post">
+                    <div>
+                       
+                        <input type="hidden" name="IdentityUserId" class="form-control" value="@userManager.GetUserId(User)"/>
+                        <input type="hidden" name="ProductId" class="form-control" value="@Model.Id" />
+                        <label for="quantity">Quantity:</label>
+                        <input type="number"  name="Quantity" min="1" max="@Model.Availability" step="1" class="form-control" value="1" required />
+                        @if (Model.Availability > 0)
+                        {
+                            <input type="submit" value="Buy" class="btn btn-primary" />
+                        }
+                        else {<h3>Out of Stock!</h3> }
+                    </div>
+                </form>
+                  
             }
 
             else

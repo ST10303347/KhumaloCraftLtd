@@ -15,6 +15,7 @@ namespace KhumaloCraftLtd.Data.Services
         public async Task Add(ProductModel product)
         {
             _context.Products.Add(product);
+            
             await _context.SaveChangesAsync();
         }
 
@@ -35,9 +36,9 @@ namespace KhumaloCraftLtd.Data.Services
             return product1;
         }
 
-        public Task SaveChanges()
+        public async Task SaveChanges()
         {
-            throw new NotImplementedException();
+            await _context.SaveChangesAsync();   
         }
     }
 }

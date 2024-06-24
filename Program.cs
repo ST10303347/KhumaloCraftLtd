@@ -22,6 +22,7 @@ namespace KhumaloCraftLtd
             builder.Services.AddControllersWithViews();
 
             builder.Services.AddScoped<IProductsService, ProductService>();
+            builder.Services.AddScoped<IPurchaseService, PurchaseService>();
 
             var app = builder.Build();
 
