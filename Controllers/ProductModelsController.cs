@@ -10,6 +10,9 @@ using KhumaloCraftLtd.Models;
 using KhumaloCraftLtd.Data.Services;
 using Microsoft.AspNetCore.Hosting;
 using System.Reflection;
+using System.Security.Claims;
+using Microsoft.Azure.Search;
+using Microsoft.Azure.Search.Models;
 
 namespace KhumaloCraftLtd.Controllers
 {
@@ -18,12 +21,14 @@ namespace KhumaloCraftLtd.Controllers
         private readonly IProductsService _ProductService;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IPurchaseService _PurchaseService;
+        //private readonly SearchService _SearchService;
 
         public ProductModelsController(IProductsService productsService, IWebHostEnvironment webHostEnvironment, IPurchaseService purchaseService)
         {
             _ProductService = productsService;
             _webHostEnvironment = webHostEnvironment;
             _PurchaseService = purchaseService;
+            //_SearchService = searchService;
         }
 
         // GET: ProductModels
@@ -31,6 +36,13 @@ namespace KhumaloCraftLtd.Controllers
         {
             var applicationDbContext = _ProductService.GetAll();
             return View(await applicationDbContext.ToListAsync());
+        }
+        public async Task<IActionResult> MyItems()
+        {
+            var applicationDbContext = _ProductService.GetAll();
+            var prod = applicationDbContext.Where(l => l.IdentityUserId == User.FindFirstValue(ClaimTypes.NameIdentifier)).AsNoTracking();
+
+            return View("Index", prod);
         }
 
         // GET: ProductModels/Create
@@ -108,11 +120,7 @@ namespace KhumaloCraftLtd.Controllers
                
 
                
-                if (product.Availability < purchase.quantity)
-                {
-                    ModelState.AddModelError("", "Insufficient product availability.");
-                    return View("Error"); 
-                }
+                
 
                
                 product.Availability -= purchase.quantity;
@@ -140,6 +148,14 @@ namespace KhumaloCraftLtd.Controllers
             return View("Details", product);
         }
 
+
+
+       /* public async Task<IActionResult> Search(string query)
+        {
+
+            var results = await _SearchService.SearchProducts(query);
+            return View();
+        }*/
 
 
 

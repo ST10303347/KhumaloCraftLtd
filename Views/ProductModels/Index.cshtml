@@ -6,29 +6,105 @@
 
 <h1>All products</h1>
 
-@foreach(var product in Model)
-{
-    <div style="font-family: Arial, sans-serif; margin: 0; padding: 20px;">
-
-        <img src="~/Images/@product.ImagePath" style="width: 300px; height: 300px;">
-        <h2><a asp-controller="ProductModels" asp-action="Details" asp-route-id="@product.Id">@product.productName</a></h2>
-        <h3>Price: R @product.Price</h3>
-        @if (product.Availability>0)
-        {
-            <h3>Available: @product.Availability</h3>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>All Products</title>
+    <style>
+        .product-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            padding: 20px;
         }
-        else
-        {
-            <h3>Out of stock!!!</h3>
+
+        .product-item {
+            flex: 1 1 calc(33.333% - 40px); /* 3 items per row with 20px gap */
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            background-color: #f9f9f9;
+            text-align: center;
         }
-        <div>Seller: @product.User.Email</div>
 
+            .product-item img {
+                width: 100%;
+                height: auto;
+                max-height: 200px;
+                object-fit: cover;
+                border-bottom: 1px solid #ddd;
+                margin-bottom: 15px;
+            }
 
+            .product-item h2 {
+                font-size: 1.5em;
+                margin: 10px 0;
+            }
+
+            .product-item h3 {
+                font-size: 1.2em;
+                margin: 5px 0;
+                color: #555;
+            }
+
+            .product-item .availability {
+                font-weight: bold;
+                color: green;
+            }
+
+            .product-item .out-of-stock {
+                color: red;
+                font-weight: bold;
+            }
+
+            .product-item a {
+                text-decoration: none;
+                color: #007bff;
+            }
+
+                .product-item a:hover {
+                    text-decoration: underline;
+                }
+
+        .no-products {
+            text-align: center;
+            font-size: 1.2em;
+            color: #777;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+    <h1>All Products</h1>
+
+    <div class="product-grid">
+        @foreach (var product in Model)
+        {
+            <div class="product-item">
+                <img src="~/Images/@product.ImagePath" alt="@product.productName" />
+                <h2><a asp-controller="ProductModels" asp-action="Details" asp-route-id="@product.Id">@product.productName</a></h2>
+                <h3>Price: R @product.Price</h3>
+                @if (product.Availability > 0)
+                {
+                    <h3 class="availability">Available: @product.Availability</h3>
+                }
+                else
+                {
+                    <h3 class="out-of-stock">Out of stock!!!</h3>
+                }
+                <div>Seller: @product.User.Email</div>
+            </div>
+        }
     </div>
-}
-@if(!Model.Any())
-{
-    <p>No Active Listings</p>
-}
 
+    @if (!Model.Any())
+    {
+        <p class="no-products">No Active Listings</p>
+    }
+</body>
+</html>
 

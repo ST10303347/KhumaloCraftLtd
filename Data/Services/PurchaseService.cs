@@ -23,10 +23,10 @@ namespace KhumaloCraftLtd.Data.Services
 
         public IQueryable<Purchase> GetAll()
         {
-            /*var applicationDbContext = from a in _context.Purchases.Include(l => l.product).ThenInclude(l => l.User)
+            var applicationDbContext = from a in _context.Purchases.Include(l => l.Product).ThenInclude(l => l.User)
                                        select a;
-            return applicationDbContext;*/
-            throw new NotImplementedException();
+            return applicationDbContext;
+          
         }
     }
 }

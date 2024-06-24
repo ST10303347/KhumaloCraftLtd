@@ -9,66 +9,163 @@
 <h1>Details</h1>
 
 
-<h4 style="text-align:center">@Model.productName</h4>
-<div class="container" style="background-color: rgba(138, 129, 133, 0.6); margin-top: 50px; margin-bottom: 50px; padding: 20px; border-radius:10px;">
-    <div class="row">
-        <div class="col col-xs-6 col-lg-5">
-            <img src="~/Images/@Model.ImagePath" style="width: 100%; max-height: 60vh;" />
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Product Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .product-details {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: rgba(138, 129, 133, 0.6);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-name {
+            text-align: center;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        .product-image {
+            display: block;
+            margin: 0 auto;
+            width: 100%;
+            max-width: 100%;
+            max-height: 60vh;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .product-description {
+            margin: 20px 0;
+            font-size: 1.1em;
+            text-align: justify;
+        }
+
+        .stock-info {
+            margin: 10px 0;
+            font-size: 1.2em;
+            color: #555;
+        }
+
+        .form-container {
+            margin-top: 20px;
+        }
+
+            .form-container form {
+                margin-bottom: 20px;
+            }
+
+            .form-container input[type="number"] {
+                width: 100px;
+                display: inline-block;
+                margin-right: 10px;
+            }
+
+        .btn {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+            .btn:hover {
+                background-color: #0056b3;
+            }
+
+        .login-notice {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #007bff;
+            text-decoration: none;
+        }
+
+            .back-link:hover {
+                text-decoration: underline;
+            }
+    </style>
+</head>
+<body>
+    <div class="product-details">
+        <!-- Product Name -->
+        <div class="product-name">
+            @Model.productName
         </div>
-        <div class="col col-xs-6 col-lg-7">
-            <div>@Model.Description</div>
-            <h3>Remaining stock : @Model.Availability</h3>
+
+        <!-- Product Image -->
+        <img src="~/Images/@Model.ImagePath" alt="@Model.productName" class="product-image" />
+
+        <!-- Product Description -->
+        <div class="product-description">
+            @Model.Description
+        </div>
+
+        <!-- Stock Information -->
+        <div class="stock-info">
+            Remaining stock: @Model.Availability
+        </div>
+
+        <div class="form-container">
+            <!-- Forms based on user status -->
             @if (User.Identity.IsAuthenticated && userManager.GetUserId(User) == Model.User.Id)
             {
-
-               
+                <!-- Add Stock Form for Product Owner -->
                 <form asp-action="AddStock" method="post">
-                    <input type="hidden" name="id" class="form-control" value="@Model.Id" />
-                        <label for="quantity">Quantity:</label>
-                        <input type="number" name="Quantity" min="1" step="1" class="form-control" value="1" required />
-                        <input type="submit" value="Add stock" class="btn btn-primary" />
-
-
-                   </form>}
- else if(User.Identity.IsAuthenticated)
-            {
-                <form  asp-action="Purchase" method="post">
-                    <div>
-                       
-                        <input type="hidden" name="IdentityUserId" class="form-control" value="@userManager.GetUserId(User)"/>
-                        <input type="hidden" name="ProductId" class="form-control" value="@Model.Id" />
-                        <label for="quantity">Quantity:</label>
-                        <input type="number"  name="Quantity" min="1" max="@Model.Availability" step="1" class="form-control" value="1" required />
-                        @if (Model.Availability > 0)
-                        {
-                            <input type="submit" value="Buy" class="btn btn-primary" />
-                        }
-                        else {<h3>Out of Stock!</h3> }
-                    </div>
+                    <input type="hidden" name="id" value="@Model.Id" />
+                    <label for="quantity">Quantity:</label>
+                    <input type="number" name="Quantity" min="1" step="1" class="form-control" value="1" required />
+                    <input type="submit" value="Add Stock" class="btn" />
                 </form>
-                  
             }
-
+            else if (User.Identity.IsAuthenticated)
+            {
+                <!-- Purchase Form for Logged-In Users -->
+                <form asp-action="Purchase" method="post">
+                    <input type="hidden" name="IdentityUserId" value="@userManager.GetUserId(User)" />
+                    <input type="hidden" name="ProductId" value="@Model.Id" />
+                    <label for="quantity">Quantity:</label>
+                    <input type="number" name="Quantity" min="1" max="@Model.Availability" step="1" class="form-control" value="1" required />
+                    @if (Model.Availability > 0)
+                    {
+                        <input type="submit" value="Buy" class="btn" />
+                    }
+                    else
+                    {
+                        <h3 class="out-of-stock">Out of Stock!</h3>
+                    }
+                </form>
+            }
             else
             {
-                
-            <div>
-                <h4>Log in to place order.</h4>
-              
-             
-                <button onclick="window.location.href='/Identity/Account/Login'" style="padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">
-                    Go to Login Page
-                </button>
-               
-            </div>
-
-
-
-
+                <!-- Notice for Unauthenticated Users -->
+                <div class="login-notice">
+                    <h4>Log in to place an order.</h4>
+                    <button onclick="window.location.href='/Identity/Account/Login'" class="btn">
+                        Go to Login Page
+                    </button>
+                </div>
             }
-            
-            
-            <div>
-                
-                <a asp-action="Index">Back to List</a>
-            </div>
+        </div>
+
+        <!-- Back to List Link -->
+        <a asp-action="Index" class="back-link">Back to List</a>
+    </div>
+</body>
+</html>

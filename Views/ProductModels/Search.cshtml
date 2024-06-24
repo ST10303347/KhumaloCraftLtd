@@ -1,0 +1,48 @@
+﻿@model IEnumerable<ProductModel>
+    
+
+@{
+    ViewData["Title"] = "Search Results";
+}
+
+<h2>Search</h2>
+
+<form asp-action="Search"  method="get"          >
+<input type="text" name="query"/>
+<button type="submit" >Search</button>
+
+
+
+</form>
+
+
+if (@Model != null){
+
+@foreach (var product in Model)
+
+{
+    
+ <div style="font-family: Arial, sans-serif; margin: 0; padding: 20px;">
+
+        <img src="~/Images/@product.ImagePath" style="width: 300px; height: 300px;">
+        <h2><a asp-controller="ProductModels" asp-action="Details" asp-route-id="@product.Id">@product.productName</a></h2>
+        <h3>Price: R @product.Price</h3>
+        @if (product.Availability>0)
+        {
+            <h3>Available: @product.Availability</h3>
+        }
+        else
+        {
+            <h3>Out of stock!!!</h3>
+        }
+        <div>Seller: @product.User.Email</div>
+
+
+    </div>
+
+}
+
+
+
+}
+else {<h3>Nothing</h3>}
