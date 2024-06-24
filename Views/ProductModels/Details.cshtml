@@ -21,7 +21,7 @@
 
  @if(User.Identity.IsAuthenticated)
             {
-                <form asp-action="Purchase" method="post">
+                <form  asp-action="Purchase" method="post">
                     <div>
                        
                         <input type="hidden" name="IdentityUserId" class="form-control" value="@userManager.GetUserId(User)"/>
@@ -31,8 +31,38 @@
                         <input type="submit" value="Buy" class="btn btn-primary" />
                     </div>
                 </form>
-              }
+                   @if(userManager.GetUserId(User) == Model.User.Id)
+                {
+                    <form asp-action="AddStock" method="post">
+                        <input type="hidden" name="ListingId" class="form-control" value="@Model.Id" />
+                        <label for="quantity">Quantity:</label>
+                        <input type="number" name="Quantity" min="1" step="1" class="form-control" value="1" required />
+                        <input type="submit" value="Add stock" class="btn btn-primary" />
 
+
+                   </form>
+                }
+            }
+
+            else
+            {
+                
+            <div>
+                <h4>Log in to place order.</h4>
+              
+             
+                <button onclick="window.location.href='/Identity/Account/Login'" style="padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                    Go to Login Page
+                </button>
+               
+            </div>
+
+
+
+
+            }
+            
+            
             <div>
                 
                 <a asp-action="Index">Back to List</a>

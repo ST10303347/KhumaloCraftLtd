@@ -46,7 +46,7 @@ namespace KhumaloCraftLtd
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=ProductModels}/{action=Index}/{id?}");
+                pattern: "{controller=Home}/{action=Index}/{id?}");
             app.MapRazorPages();
 
             app.Run();

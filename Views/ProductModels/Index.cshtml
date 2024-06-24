@@ -12,7 +12,15 @@
 
         <img src="~/Images/@product.ImagePath" style="width: 300px; height: 300px;">
         <h2><a asp-controller="ProductModels" asp-action="Details" asp-route-id="@product.Id">@product.productName</a></h2>
-        <h3>@product.Price</h3>
+        <h3>Price: R @product.Price</h3>
+        @if (product.Availability>0)
+        {
+            <h3>Available: @product.Availability</h3>
+        }
+        else
+        {
+            <h3>Out of stock!!!</h3>
+        }
         <div>Seller: @product.User.Email</div>
 
 

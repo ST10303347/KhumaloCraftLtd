@@ -18,7 +18,7 @@ namespace KhumaloCraftLtd.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult MyWorkPage()
         {
             return View();
         }
