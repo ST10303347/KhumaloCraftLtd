@@ -11,8 +11,7 @@ using KhumaloCraftLtd.Data.Services;
 using Microsoft.AspNetCore.Hosting;
 using System.Reflection;
 using System.Security.Claims;
-using Microsoft.Azure.Search;
-using Microsoft.Azure.Search.Models;
+
 
 namespace KhumaloCraftLtd.Controllers
 {
@@ -42,7 +41,7 @@ namespace KhumaloCraftLtd.Controllers
             var applicationDbContext = _ProductService.GetAll();
             var prod = applicationDbContext.Where(l => l.IdentityUserId == User.FindFirstValue(ClaimTypes.NameIdentifier)).AsNoTracking();
 
-            return View("Index", prod);
+            return View("MyItems", prod);
         }
 
         // GET: ProductModels/Create
