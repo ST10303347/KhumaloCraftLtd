@@ -2,15 +2,34 @@
 
 @{
     ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 
-
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Ensures proper scaling on mobile -->
     <title>All Products</title>
     <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+
+        h1 {
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+            background-color: #007bff;
+            color: #fff;
+            font-size: 2em;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
         .product-grid {
             display: flex;
             flex-wrap: wrap;
@@ -20,55 +39,70 @@
         }
 
         .product-item {
-            flex: 1 1 calc(33.333% - 40px); /* 3 items per row with 20px gap */
+            flex: 1 1 calc(33.333% - 40px); /* Default: 3 items per row with 20px gap */
             box-sizing: border-box;
             border: 1px solid #ddd;
-            border-radius: 8px;
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             padding: 20px;
-            background-color: #f9f9f9;
+            background-color: #fff;
             text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
         }
 
-            .product-item img {
-                width: 100%;
-                height: auto;
-                max-height: 200px;
-                object-fit: cover;
-                border-bottom: 1px solid #ddd;
-                margin-bottom: 15px;
-            }
+        .product-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+        }
 
-            .product-item h2 {
-                font-size: 1.5em;
-                margin: 10px 0;
-            }
+        .product-item img {
+            width: 100%;
+            height: auto;
+            max-height: 200px;
+            object-fit: cover;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 15px;
+            border-radius: 8px;
+        }
 
-            .product-item h3 {
-                font-size: 1.2em;
-                margin: 5px 0;
-                color: #555;
-            }
+        .product-item h2 {
+            font-size: 1.6em;
+            margin: 10px 0;
+            color: #333;
+        }
 
-            .product-item .availability {
-                font-weight: bold;
-                color: green;
-            }
+        .product-item h3 {
+            font-size: 1.3em;
+            margin: 5px 0;
+            color: #666;
+        }
 
-            .product-item .out-of-stock {
-                color: red;
-                font-weight: bold;
-            }
+        .product-item .availability {
+            font-weight: bold;
+            color: #28a745;
+        }
 
-            .product-item a {
-                text-decoration: none;
-                color: #007bff;
-            }
+        .product-item .out-of-stock {
+            color: #dc3545;
+            font-weight: bold;
+        }
 
-                .product-item a:hover {
-                    text-decoration: underline;
-                }
+        .product-item a {
+            text-decoration: none;
+            color: #007bff;
+            font-weight: bold;
+        }
+
+        .product-item a:hover {
+            text-decoration: underline;
+        }
+
+        .product-item .seller {
+            font-size: 0.9em;
+            color: #777;
+            margin-top: 10px;
+        }
 
         .no-products {
             text-align: center;
@@ -76,10 +110,43 @@
             color: #777;
             margin-top: 50px;
         }
+
+        /* Media Queries for Responsive Design */
+        @@media (max-width: 1200px) {
+            .product-item {
+                flex: 1 1 calc(50% - 40px); /* 2 items per row */
+            }
+        }
+
+        @@media (max-width: 768px) {
+            .product-item {
+                flex: 1 1 calc(100% - 40px); /* 1 item per row with margin */
+                margin: 0 10px;
+            }
+        }
+
+        @@media (max-width: 480px) {
+            .product-item {
+                flex: 1 1 100%; /* 1 item per row */
+                padding: 15px;
+            }
+
+            .product-item h2 {
+                font-size: 1.4em;
+            }
+
+            .product-item h3 {
+                font-size: 1.1em;
+            }
+
+            .product-item img {
+                max-height: 150px;
+            }
+        }
     </style>
 </head>
 <body>
-    <h1>All Products</h1>
+    <h1>My Products</h1>
 
     <div class="product-grid">
         @foreach (var product in Model)
@@ -96,7 +163,7 @@
                 {
                     <h3 class="out-of-stock">Out of stock!!!</h3>
                 }
-                <div>Seller: @product.User.Email</div>
+                <div class="seller">Seller: @product.User.Email</div>
             </div>
         }
     </div>
@@ -107,4 +174,3 @@
     }
 </body>
 </html>
-
