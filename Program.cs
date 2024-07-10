@@ -11,26 +11,20 @@ namespace KhumaloCraftLtd
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add User Secrets
+            // Add User Secrets if in development
             if (builder.Environment.IsDevelopment())
             {
                 builder.Configuration.AddUserSecrets<Program>();
             }
 
-            var configuration = builder.Configuration;
+            // Configure DbContext using ApplicationDbContext.ConfigureServices method
+            ApplicationDbContext.ConfigureServices(builder.Services, builder.Configuration);
 
             builder.Services.AddAuthentication().AddGoogle(googleOptions =>
             {
-                googleOptions.ClientId = configuration["Authentication:Google:ClientId"];
-                googleOptions.ClientSecret = configuration["Authentication:Google:ClientSecret"];
+                googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"];
+                googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
             });
-
-            // Add services to the container.
-            var connectionString = configuration.GetConnectionString("DefaultConnection")
-                                   ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-
-            builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(connectionString));
 
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
